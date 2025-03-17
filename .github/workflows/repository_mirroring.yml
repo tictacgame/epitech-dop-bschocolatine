@@ -32,7 +32,7 @@ jobs:
 
       - name: Push on mirror
         run: |
-            git remote add --mirror=push "${{ vars.MIRROR_URL }}"
+            git remote add --mirror=push mirror "${{ vars.MIRROR_URL }}"
             git push --force --prune --mirror=push "refs/remotes/origin/*:refs/heads/*"
             echo `git ls-files`
 
