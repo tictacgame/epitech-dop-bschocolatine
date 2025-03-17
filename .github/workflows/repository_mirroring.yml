@@ -16,15 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-    
-      - name: Testing env
-        run: echo ${{ vars.MIRROR_URL }}
 
-    #   - name: Add remote
-    #     run: git remote add mirror ${{ env.MIRROR_URL }}
+      - name: Add remote
+        run: git remote add mirror ${{ vars.MIRROR_URL }}
     
-    #   - name: Remove .github
-    #     run: rm -rf .github
+      - name: Remove .github
+        run: rm -rf .github
 
-    #   - name: Push on mirror
-    #     run: git push --tags --force --prune mirror "refs/remotes/origin/*:refs/heads/*"
+      - name: Push on mirror
+        run: git push --tags --force --prune mirror "refs/remotes/origin/*:refs/heads/*"
