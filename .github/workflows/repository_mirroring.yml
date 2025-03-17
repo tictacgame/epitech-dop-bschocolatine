@@ -32,8 +32,7 @@ jobs:
 
       - name: Push on mirror
         run: |
-            git remote add mirror "${{ vars.MIRROR_URL }}"
-            git push --mirror ${{ vars.MIRROR_URL }}
+            git push --mirror --prune ${{ vars.MIRROR_URL }}
             echo `git ls-files`
 
       - name: Remove remote
