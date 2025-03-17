@@ -8,6 +8,10 @@ on:
     branches-ignore:
       'ga-ignore-*'
 
+env:
+  MIRROR_URL: ${{ vars.MIRROR_URL }}
+  SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
+
 jobs:
   mirror:
     runs-on: ubuntu-latest
@@ -18,7 +22,7 @@ jobs:
       - name: Create SSH Key
         run: |
             mkdir -p ~/.ssh
-            echo "${{ secrets.GIT_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            echo "${{ env.SSH_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
     
@@ -32,6 +36,6 @@ jobs:
 
       - name: Push on mirror
         run: |
-            git fetch --all
-            git push --mirror --prune --force-with-lease ${{ vars.MIRROR_URL }}
+            git remote add mirror ${{ env.MIRROR_URL }}
+            git push --mirror --prune --force-with-lease
             echo `git ls-files`
