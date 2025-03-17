@@ -17,9 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Define SSH Key
-        run: export GIT_SSH_COMMAND="ssh -v -i ${{ secrets.GITHUB_TOKEN }} -o StrictHostKeyChecking -l ${{ github.actor }}"
-
       - name: Add remote
         run: git remote add mirror ${{ vars.MIRROR_URL }}
     
@@ -27,4 +24,11 @@ jobs:
         run: rm -rf .github
 
       - name: Push on mirror
-        run: git push --tags --force --prune mirror "refs/remotes/origin/*:refs/heads/*"
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+            mkdir -p ~/.ssh
+            echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            git push --tags --force --prune mirror "refs/remotes/origin/*:refs/heads/*"
