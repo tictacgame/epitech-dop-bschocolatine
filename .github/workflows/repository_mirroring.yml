@@ -35,9 +35,9 @@ jobs:
           git fsck --full || echo "Git fsck completed with warnings"
           git gc || echo "Git gc completed with warnings"
 
-      - name: Push to mirror
+      - name: Push to mirror (main branch only)
         run: |
           git remote add mirror ${{ env.MIRROR_URL }}
-          git push --mirror --prune --force-with-lease mirror
+          git push mirror main --force-with-lease
           echo "Files pushed to mirror:"
           git ls-files
