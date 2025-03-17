@@ -11,5 +11,6 @@ int main(void)
 {
     printf("Hello EPITECH\n");
     printf("This is a debug file\n");
+    printf("I dont need help\n");
     return 0;
 }
