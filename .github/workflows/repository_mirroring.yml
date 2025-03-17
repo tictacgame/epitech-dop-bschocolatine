@@ -23,7 +23,7 @@ jobs:
             ssh-keyscan github.com >> ~/.ssh/known_hosts
     
       - name: Remove .github
-        run: git rm -rf --cached .github/
+        run: git rm -rf --cached .github
 
       - name: Verify Repository
         run: |
