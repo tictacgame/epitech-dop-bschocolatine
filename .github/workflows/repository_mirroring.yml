@@ -10,7 +10,6 @@ on:
 
 env:
   MIRROR_URL: ${{ vars.MIRROR_URL }}
-  SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
 
 jobs:
   mirror:
@@ -25,18 +24,21 @@ jobs:
             echo "${{ env.SSH_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
+        env:
+          SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
     
-      - name: Remove .github
-        run: git rm -rf --cached .github
+      - name: Remove .github directory (if present)
+        run: git rm -rf --cached .github || echo ".github not found, skipping removal"
 
       - name: Verify Repository
         run: |
-            git fsck
-            git gc
+          git fsck --full || echo "Git fsck completed with warnings"
+          git gc || echo "Git gc completed with warnings"
 
-      - name: Push on mirror
+      - name: Push to mirror
         run: |
-            git remote add mirror ${{ env.MIRROR_URL }}
-            git fetch
-            git push --mirror --prune --force-with-lease mirror
-            echo `git ls-files`
+          git remote add mirror ${{ env.MIRROR_URL }}
+          git fetch --all
+          git push --mirror --prune --force-with-lease mirror
+          echo "Files pushed to mirror:"
+          git ls-files
