@@ -27,8 +27,8 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
     
-      - name: Remove .github directory (if present)
-        run: git rm -rf --cached .github || echo ".github not found, skipping removal"
+      # - name: Remove .github directory (if present)
+      #   run: git rm -rf --cached .github || echo ".github not found, skipping removal"
 
       - name: Verify Repository
         run: |
