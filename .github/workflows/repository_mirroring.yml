@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
     
       - name: Testing env
-        run: echo ${{ env.MIRROR_URL }}
+        run: echo ${{ vars.MIRROR_URL }}
 
     #   - name: Add remote
     #     run: git remote add mirror ${{ env.MIRROR_URL }}
