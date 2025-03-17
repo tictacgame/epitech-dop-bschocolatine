@@ -9,7 +9,8 @@ on:
       'ga-ignore-*'
 
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Echo the date
-      run: echo `date`
+  what_time_is_it:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo the date
+        run: echo `date`
