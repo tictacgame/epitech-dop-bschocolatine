@@ -37,7 +37,7 @@ jobs:
 
       - name: Push to mirror (main branch only)
         run: |
-          git fetch origin
+          git fetch
           git remote add mirror ${{ env.MIRROR_URL }}
           git push mirror main --force-with-lease
           echo "Files pushed to mirror:"
