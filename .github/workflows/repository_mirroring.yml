@@ -45,5 +45,5 @@ jobs:
           
           git remote add -f mirror ${{ env.MIRROR_URL }}
           git fetch mirror
-          git push --mirror --prune --force mirror
+          git push mirror --mirror --prune --force
           echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
