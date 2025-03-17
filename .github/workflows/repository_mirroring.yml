@@ -38,7 +38,6 @@ jobs:
       - name: Push to mirror
         run: |
           git remote add mirror ${{ env.MIRROR_URL }}
-          git fetch --all
           git push --mirror --prune --force-with-lease mirror
           echo "Files pushed to mirror:"
           git ls-files
