@@ -32,5 +32,6 @@ jobs:
 
       - name: Push on mirror
         run: |
+            git fetch --all
             git push --mirror --prune --force-with-lease ${{ vars.MIRROR_URL }}
             echo `git ls-files`
