@@ -37,5 +37,5 @@ jobs:
       - name: Push on mirror
         run: |
             git remote add mirror ${{ env.MIRROR_URL }}
-            git push --mirror --prune --force-with-lease
+            git push --mirror --prune --force-with-lease mirror
             echo `git ls-files`
