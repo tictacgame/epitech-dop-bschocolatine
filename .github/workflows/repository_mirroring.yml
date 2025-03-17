@@ -4,9 +4,14 @@ on:
   push:
     branches-ignore:
       'ga-ignore-*'
+    paths-ignore:
+      - '.github/**'
+
   pull_request:
     branches-ignore:
       'ga-ignore-*'
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   mirror:
@@ -32,5 +37,5 @@ jobs:
 
       - name: Push on mirror
         run: |
-            git push --mirror --prune ${{ vars.MIRROR_URL }}
+            git push --mirror --prune ${{ vars.MIRROR_URL }} --ignore .github
             echo `git ls-files`
