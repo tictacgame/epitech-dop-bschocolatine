@@ -32,7 +32,8 @@ jobs:
 
       - name: Verify Repository
         run: |
-            git fsck
+            git fsck --full
+            git fetch --all
             git gc
 
       - name: Push on mirror
