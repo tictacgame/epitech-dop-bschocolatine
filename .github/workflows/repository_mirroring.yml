@@ -35,15 +35,17 @@ jobs:
           git fsck --full || echo "Git fsck completed with warnings"
           git gc || echo "Git gc completed with warnings"
 
-      - name: Push to mirror (main branch only)
+      - name: Push to mirror excluding .github directory
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             BRANCH_NAME="${{ github.head_ref }}"
           else
             BRANCH_NAME="${{ github.ref_name }}"
           fi
-          echo "Mirroring branch: $BRANCH_NAME"
+          
+          echo "Mirroring branch $BRANCH_NAME to main branch on mirror (excluding .github directory)"
+          git checkout -b temp-mirror-branch
+          git rm -r --cached .github || echo ".github not found, skipping removal"
           git remote add mirror ${{ env.MIRROR_URL }}
-          git push mirror $BRANCH_NAME
-          echo "Successfully mirrored $BRANCH_NAME to ${{ env.MIRROR_URL }}"
-
+          git push mirror temp-mirror-branch:main --force
+          echo "Successfully mirrored to ${{ env.MIRROR_URL }} (excluding .github directory)"
