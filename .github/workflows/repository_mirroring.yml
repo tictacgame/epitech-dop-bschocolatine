@@ -43,7 +43,7 @@ jobs:
             BRANCH_NAME="${{ github.ref_name }}"
           fi
           
-          git fetch
           git remote add -f mirror ${{ env.MIRROR_URL }}
+          git fetch mirror
           git push --mirror --prune --force mirror
           echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
