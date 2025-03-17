@@ -4,14 +4,9 @@ on:
   push:
     branches-ignore:
       'ga-ignore-*'
-    paths-ignore:
-      - '.github/**'
-
   pull_request:
     branches-ignore:
       'ga-ignore-*'
-    paths-ignore:
-      - '.github/**'
 
 jobs:
   mirror:
@@ -33,7 +28,6 @@ jobs:
       - name: Verify Repository
         run: |
             git fsck --full
-            git fetch --all
             git gc
 
       - name: Push on mirror
