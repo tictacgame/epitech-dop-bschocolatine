@@ -44,5 +44,5 @@ jobs:
           fi
           
           git remote add mirror ${{ env.MIRROR_URL }}
-          git push mirror temp-mirror-branch:main --force
+          git push mirror
           echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
