@@ -32,6 +32,5 @@ jobs:
 
       - name: Push on mirror
         run: |
-            git rm -rf --cached .github
             git push --mirror --prune ${{ vars.MIRROR_URL }}
             echo `git ls-files`
