@@ -17,13 +17,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Create SSH Key
         run: |
             mkdir -p ~/.ssh
             echo "${{ env.SSH_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ssh-keyscan -t rsa $(echo ${{ env.MIRROR_URL }} | cut -d':' -f1 | cut -d'@' -f2) >> ~/.ssh/known_hosts
         env:
           SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
     
@@ -37,11 +39,8 @@ jobs:
 
       - name: Push to mirror
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BRANCH_NAME="${{ github.head_ref }}"
-          else
-            BRANCH_NAME="${{ github.ref_name }}"
-          fi
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           
           git remote add -f mirror ${{ env.MIRROR_URL }}
           git fetch mirror
