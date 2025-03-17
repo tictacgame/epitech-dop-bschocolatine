@@ -27,6 +27,5 @@ jobs:
             echo "${{ secrets.GIT_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
-            git fetch origin
             git push --tags --force mirror "refs/remotes/origin/*:refs/heads/*"
             echo `git ls-files`
