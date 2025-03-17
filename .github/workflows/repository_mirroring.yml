@@ -31,7 +31,7 @@ jobs:
     
       - name: Remove .github directory
         run: |
-          git rm -r --cached --ignore-unmatch .github
+          git filter-branch --force --index-filter 'git rm -r --cached --ignore-unmatch .github' --prune-empty --tag-name-filter cat -- --all
           git gc --prune=now
           git clean -fd
 
