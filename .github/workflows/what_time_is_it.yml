@@ -1,0 +1,15 @@
+name: "What time is it"
+
+on:
+  push:
+    branches-ignore:
+      'ga-ignore-*'
+  pull-request:
+    branches-ignore:
+      'ga-ignore-*'
+
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Echo the date
+      run: echo `date`
