@@ -37,8 +37,13 @@ jobs:
 
       - name: Push to mirror (main branch only)
         run: |
-          git fetch
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BRANCH_NAME="${{ github.head_ref }}"
+          else
+            BRANCH_NAME="${{ github.ref_name }}"
+          fi
+          echo "Mirroring branch: $BRANCH_NAME"
           git remote add mirror ${{ env.MIRROR_URL }}
-          git push mirror main --force
-          echo "Files pushed to mirror:"
-          git ls-files
+          git push mirror $BRANCH_NAME
+          echo "Successfully mirrored $BRANCH_NAME to ${{ env.MIRROR_URL }}"
+
