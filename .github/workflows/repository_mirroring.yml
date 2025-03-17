@@ -1,0 +1,30 @@
+name: Repository mirroring
+
+on:
+  push:
+    branches-ignore:
+      'ga-ignore-*'
+  pull_request:
+    branches-ignore:
+      'ga-ignore-*'
+
+ 
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+    
+      - name: Testing env
+        run: ${{ env.MIRROR_URL }}
+
+    #   - name: Add remote
+    #     run: git remote add mirror ${{ env.MIRROR_URL }}
+    
+    #   - name: Remove .github
+    #     run: rm -rf .github
+
+    #   - name: Push on mirror
+    #     run: git push --tags --force --prune mirror "refs/remotes/origin/*:refs/heads/*"
