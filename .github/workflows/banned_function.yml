@@ -1,0 +1,48 @@
+name: Check banned function
+
+on:
+  workflow_run:
+    workflows: ["Build checker"]
+    types:
+      - completed
+
+jobs:
+  retrieve-bin:
+    name: "Retrive Binary file"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve binary
+        uses: actions/download-artifact@v3
+        with:
+          name: binary
+          path: ./binary
+
+  banned-function:
+    runs-on: ubuntu-latest
+    needs: [retrieve-bin]
+    steps:
+      - name: Check for banned functions
+        run: |
+          banned_functions=$(nm -C binary | grep GLIBC | grep -v '^_')
+          if [ -f allowed_function.note ]; then
+            allowed_functions=$(cat allowed_function.note)
+          else
+            allowed_functions=""
+            echo "Warning: allowed_function.note not found. All banned functions will be considered illegal."
+          fi
+
+          if [ -n "$banned_functions" ]; then
+            echo "Banned functions found:"
+            while IFS= read -r function; do
+              if [ -n "$allowed_functions" ]; then
+                if ! echo "$allowed_functions" | grep -qw "$function"; then
+                  echo "::error file=./binary/a.out::Banned function detected: $function"
+                fi
+              else
+                echo "::error file=./binary/a.out::Banned function detected: $function"
+              fi
+            done <<< "$banned_functions"
+            exit 1
+          else
+            echo "No banned functions found."
+          fi
