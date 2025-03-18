@@ -41,5 +41,4 @@ jobs:
             exit 1
           else
             echo "::notice ::No banned functions found."
-            exit 1
           fi
