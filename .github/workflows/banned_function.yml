@@ -25,7 +25,6 @@ jobs:
             allowed_functions=""
             echo "::warning title='Warning: allowed_function.note not found. All banned functions will be considered illegal.'"
           fi
-          exit 1024
           banned_functions=$(nm -C binary | grep GLIBC | grep -v '__')
 
           if [ -z "$banned_functions" ]; then
