@@ -31,8 +31,9 @@ jobs:
           if [ -n "$banned_functions" ]; then
             while IFS= read -r function; do
               if [ -n "$allowed_functions" ]; then
-                if ! echo "$allowed_functions" | grep -qw "$function"; then
-                  echo "::error file=./binary::Banned function detected: $function"
+                function=$(`echo $function | sed 's/@/\n/g'`)
+                if ! echo "$allowed_functions" | grep -qw "$function[0]"; then
+                  echo "::error file=./binary::Banned function detected: $function[0]"
                 fi
               else
                 echo "::error file=./binary::Banned function detected: $function"
