@@ -20,12 +20,12 @@ jobs:
         run: |
           check.sh $(pwd) $(pwd)
           if [ -s "$(pwd)/coding-style-reports.log" ]; then
-            while IFS= read -r ERROR
-            do
-              array=(`echo $ERROR | sed 's/:/\n/g'`)
-              echo "::error file=${array[0]#./},title=${array[2]} coding style errors detected: ${array[1]}::${array[3]}"
-            done < "$(pwd)/coding-style-reports.log"
-            exit 1
+              while IFS= read -r ERROR
+              do
+                  array=(`echo $ERROR | sed 's/:/\n/g'`)
+                  echo "::error file=${array[0]#./},line=${array[1]}, title=${array[2]} coding style errors detected: ::${array[3]}"
+              done < "$(pwd)/coding-style-reports.log"
+              exit 1
           else
-            echo "No coding style errors detected"
+              echo "::success No coding style errors detected"
           fi
