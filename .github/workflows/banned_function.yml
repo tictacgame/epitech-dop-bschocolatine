@@ -27,8 +27,8 @@ jobs:
             echo "::warning title='Warning: allowed_function.note not found. All banned functions will be considered illegal.'"
           fi
 
+          exit 1024
           if [ -z "$banned_functions" ]; then
-            exit 1024
             echo "::warning title=Banned functions found:"
             while IFS= read -r function; do
               if [ -n "$allowed_functions" ]; then
