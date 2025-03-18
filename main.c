@@ -9,7 +9,5 @@
 
 int main(void)
 {
-    printf("Hello EPITECH\n");
-    printf("This is a debug file\n");
     return 0;
 }
