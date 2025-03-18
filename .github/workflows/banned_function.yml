@@ -19,7 +19,7 @@ jobs:
 
       - name: Check for banned functions
         run: |
-          banned_functions=$(nm -C binary | grep GLIBC | grep -v '^__')
+          banned_functions=$(nm -C binary | grep GLIBC | grep -v '__')
           if [ -f allowed_function.note ]; then
             allowed_functions=$(cat allowed_function.note)
           else
@@ -30,7 +30,6 @@ jobs:
           if [ -n "$banned_functions" ]; then
             echo "Banned functions found:"
             while IFS= read -r function; do
-              function=$(echo "$function" | awk '{print $3}')
               if [ -n "$allowed_functions" ]; then
                 if ! echo "$allowed_functions" | grep -qw "$function"; then
                   echo "::error file=./binary::Banned function detected: $function"
