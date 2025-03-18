@@ -16,7 +16,7 @@ jobs:
 
       - name: Create binary
         run: |
-          exit_status=$(make || true)
+          exit_status=$(make)
           if [ exit_status == 1 ]; then
             echo "::error ::Build ERROR"
             exit 1
