@@ -20,13 +20,13 @@ jobs:
         shell: bash
         run: |
           check.sh $(pwd) $(pwd)
-          CODING_STYLE_ERRORS=$(cat $(pwd)/coding-style-reports.log)
+          CS=$(cat $(pwd)/coding-style-reports.log)
           while IFS= read -r ERROR
             do
             array=(`echo $ERRORS | sed 's/:/\n/g'`)
             echo "::error file=${array[1]#./},title=${array[3]#./} coding style errors detected: ${array[2]#./}::${array[4]#./}"
-          done
-          if [[ -n $CODING_STYLE_ERRORS ]]
+          done < $CS
+          if [[ -n $CS ]]
           then
             exit 1
           else
