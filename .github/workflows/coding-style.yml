@@ -15,7 +15,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - id: coding_style
+
+      - name: Process coding style checker
+        shell: bash
         run: |
           check.sh $(pwd) $(pwd)
           CODING_STYLE_ERRORS=$(cat $(pwd)/coding-style-reports.log)
