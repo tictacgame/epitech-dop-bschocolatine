@@ -28,8 +28,7 @@ jobs:
           echo $(ls)
           banned_functions=$(nm -C binary | grep GLIBC | grep -v "__" || true)
 
-          if [ -z "$banned_functions" ]; then
-            echo "::warning ::Banned functions found:"
+          if [ -n "$banned_functions" ]; then
             while IFS= read -r function; do
               if [ -n "$allowed_functions" ]; then
                 if ! echo "$allowed_functions" | grep -qw "$function"; then
