@@ -15,11 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create binary
-        run: |
-          exit_status=$(make)
-          if [ exit_status == 1 ]; then
-            echo "::error ::Build ERROR"
-            exit 1
+        run: make
 
       - name: Check for banned functions
         run: |
