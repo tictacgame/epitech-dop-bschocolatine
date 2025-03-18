@@ -38,7 +38,7 @@ jobs:
                 echo "::error file=./binary::Banned function detected: $function"
               fi
             done <<< "$banned_functions"
-            exit 1
+            exit 134
           else
             echo "No banned functions found."
             exit 32
