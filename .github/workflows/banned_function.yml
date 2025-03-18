@@ -18,6 +18,7 @@ jobs:
         run: make
 
       - name: Check for banned functions
+        if: succcess()
         run: |
           if [ -f allowed_function.note ]; then
             allowed_functions=$(cat allowed_function.note)
@@ -25,6 +26,7 @@ jobs:
             allowed_functions=""
             echo "::warning title='Warning: allowed_function.note not found. All banned functions will be considered illegal.'"
           fi
+          echo $(ls)
           banned_functions=$(nm -C binary | grep GLIBC | grep -v '__')
 
           if [ -z "$banned_functions" ]; then
