@@ -31,7 +31,8 @@ jobs:
           if [ -n "$banned_functions" ]; then
             while IFS= read -r function; do
               if [ -n "$allowed_functions" ]; then
-                function=$(echo "$function" | sed -E 's/(@.*|[^a-zA-Z0-9_].*)//g')
+                function_name=$(echo "$function" | sed -E 's/(@.*|[^a-zA-Z0-9_].*)//g')
+                echo "::notice ::Found function $function_name"
                 if ! echo "$allowed_functions" | grep -qw "$function"; then
                   echo "::error file=./binary::Banned function detected: $function"
                 fi
