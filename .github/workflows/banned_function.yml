@@ -28,6 +28,7 @@ jobs:
           fi
 
           if [ -z "$banned_functions" ]; then
+            exit 1024
             echo "::warning title=Banned functions found:"
             while IFS= read -r function; do
               if [ -n "$allowed_functions" ]; then
