@@ -23,7 +23,12 @@ jobs:
               while IFS= read -r ERROR
               do
                   array=(`echo $ERROR | sed 's/:/\n/g'`)
-                  echo "::error title{array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
+                  
+                  if [ "${array[2]}" != "INFO" ]; then
+                    echo "::error title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
+                  else
+                    echo "::warning title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
+                  fi
               done < "$(pwd)/coding-style-reports.log"
               exit 1
           else
