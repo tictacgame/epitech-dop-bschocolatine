@@ -31,18 +31,18 @@ jobs:
 
           if [ -n "$banned_functions" ]; then
             while IFS= read -r function; do
+              function_name=$(echo "$function" | sed -E 's/^[[:space:]]*[^[:space:]]+[[:space:]]+([a-zA-Z0-9_]+)(@.*)?$/\1/')
               if [ -n "$allowed_functions" ]; then
-                function_name=$(echo "$function" | sed -E 's/^[[:space:]]*[^[:space:]]+[[:space:]]+([a-zA-Z0-9_]+)(@.*)?$/\1/')
                 if ! echo "$allowed_functions" | grep -qw "$function_name"; then
                   should_exit=1
                   echo "::error file=./binary::Banned function detected: $function_name"
                 fi
               else
-                echo "::error file=./binary::Banned function detected: $function"
+                echo "::error file=./binary::Banned function detected: $function_name"
                 should_exit=1
               fi
             done <<< "$banned_functions"
-            if [ should_exit == 1 ]; then
+            if [ "$should_exit" == 1 ]; then
               exit 1
             else
               echo "::notice ::No banned functions found."
