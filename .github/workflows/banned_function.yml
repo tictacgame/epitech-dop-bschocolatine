@@ -18,7 +18,6 @@ jobs:
         run: make
 
       - name: Check for banned functions
-        if: succcess()
         run: |
           if [ -f allowed_function.note ]; then
             allowed_functions=$(cat allowed_function.note)
