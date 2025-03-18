@@ -26,7 +26,7 @@ jobs:
             echo "::warning ::Warning: allowed_function.note not found. All banned functions will be considered illegal."
           fi
           echo $(ls)
-          banned_functions=$(nm -C binary | grep GLIBC | grep -v "__")
+          banned_functions=$(nm -C binary | grep GLIBC | grep -v "__" 2>/dev/null 1>/dev/null)
 
           if [ -z "$banned_functions" ]; then
             echo "::warning ::Banned functions found:"
@@ -39,8 +39,8 @@ jobs:
                 echo "::error file=./binary::Banned function detected: $function"
               fi
             done <<< "$banned_functions"
-            exit 134
+            exit 1
           else
-            echo "No banned functions found."
-            exit 32
+            echo "::notice ::No banned functions found."
+            exit 1
           fi
