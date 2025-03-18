@@ -19,18 +19,22 @@ jobs:
         shell: bash
         run: |
           check.sh $(pwd) $(pwd)
+          should_exit=0
           if [ -s "$(pwd)/coding-style-reports.log" ]; then
               while IFS= read -r ERROR
               do
                   array=(`echo $ERROR | sed 's/:/\n/g'`)
 
                   if [ "${array[2]}" != "INFO" ]; then
+                    should_exit=1
                     echo "::error title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
                   else
                     echo "::warning title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
                   fi
               done < "$(pwd)/coding-style-reports.log"
-              exit 1
+              if [ should_exit == 1]; then
+                exit 1
+              fi
           else
               echo "::notice ::No coding style errors detected"
           fi
