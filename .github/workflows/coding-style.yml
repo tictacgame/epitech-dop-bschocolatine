@@ -19,13 +19,12 @@ jobs:
           run: |
             check.sh $(pwd) $(pwd)
             CSERR=$(cat $(pwd)/coding-style-reports.log)
-            for ERR in $CSERR; do
-              str=(`echo $ERR | sed 's/:/\n/g'`)
+            while IFS= read -r ERR; do
+              str=$(echo $ERR | sed 's/:/\n/g')
               echo "::error file=${str[1]#./},title=${str[3]#./} coding style errors detected: ${str[2]#./}::${str[4]#./}"
-            done
+            done <<< "$CSERR"
             if [[ -n $CS ]]; then
               exit 1
             else
               echo No coding style errors detected
             fi
-    
