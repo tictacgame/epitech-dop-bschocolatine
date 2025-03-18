@@ -28,7 +28,7 @@ jobs:
           fi
 
           if [ -n "$banned_functions" ]; then
-            echo "Banned functions found:"
+            echo "::warning title=Banned functions found:"
             while IFS= read -r function; do
               if [ -n "$allowed_functions" ]; then
                 if ! echo "$allowed_functions" | grep -qw "$function"; then
