@@ -19,15 +19,15 @@ jobs:
 
       - name: Check for banned functions
         run: |
-          banned_functions=$(nm -C binary | grep GLIBC | grep -v '__')
           if [ -f allowed_function.note ]; then
             allowed_functions=$(cat allowed_function.note)
           else
             allowed_functions=""
             echo "::warning title='Warning: allowed_function.note not found. All banned functions will be considered illegal.'"
           fi
-
           exit 1024
+          banned_functions=$(nm -C binary | grep GLIBC | grep -v '__')
+
           if [ -z "$banned_functions" ]; then
             echo "::warning title=Banned functions found:"
             while IFS= read -r function; do
