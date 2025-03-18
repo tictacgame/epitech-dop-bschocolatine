@@ -6,7 +6,6 @@ on:
       - "main"
   pull_request:
 
-
 jobs:
   check_coding_style:
     name: "Check coding styles error"
@@ -20,16 +19,13 @@ jobs:
         shell: bash
         run: |
           check.sh $(pwd) $(pwd)
-          CS=$(cat $(pwd)/coding-style-reports.log)
-          while IFS= read -r ERROR
+          if [ -s "$(pwd)/coding-style-reports.log" ]; then
+            while IFS= read -r ERROR
             do
-            array=(`echo $ERRORS | sed 's/:/\n/g'`)
-            echo "::error file=${array[1]#./},title=${array[3]#./} coding style errors detected: ${array[2]#./}::${array[4]#./}"
-          done < $CS
-          if [[ -n $CS ]]
-          then
+              array=(`echo $ERROR | sed 's/:/\n/g'`)
+              echo "::error file=${array[0]#./},title=${array[2]} coding style errors detected: ${array[1]}::${array[3]}"
+            done < "$(pwd)/coding-style-reports.log"
             exit 1
           else
-            echo No coding style errors detected
+            echo "No coding style errors detected"
           fi
-  
