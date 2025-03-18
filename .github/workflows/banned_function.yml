@@ -19,7 +19,7 @@ jobs:
 
       - name: Check for banned functions
         run: |
-          banned_functions=$(nm -C binary | grep GLIBC | grep -v '^_')
+          banned_functions=$(nm -C binary | grep GLIBC | grep -v '^__')
           if [ -f allowed_function.note ]; then
             allowed_functions=$(cat allowed_function.note)
           else
