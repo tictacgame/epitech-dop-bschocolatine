@@ -23,7 +23,7 @@ jobs:
               while IFS= read -r ERROR
               do
                   array=(`echo $ERROR | sed 's/:/\n/g'`)
-                  
+
                   if [ "${array[2]}" != "INFO" ]; then
                     echo "::error title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
                   else
@@ -32,5 +32,5 @@ jobs:
               done < "$(pwd)/coding-style-reports.log"
               exit 1
           else
-              echo "No coding style errors detected"
+              echo "::notice ::No coding style errors detected"
           fi
