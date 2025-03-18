@@ -42,7 +42,7 @@ jobs:
                 should_exit=1
               fi
             done <<< "$banned_functions"
-            if [ should_exit == 1]; then
+            if [ should_exit == 1 ]; then
               exit 1
             else
               echo "::notice ::No banned functions found."
