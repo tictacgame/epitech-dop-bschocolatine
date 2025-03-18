@@ -1,10 +1,10 @@
 name: Check banned function
 
 on:
-  workflow_run:
-    workflows: ["Build checker"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   banned-function:
@@ -15,7 +15,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create binary
-        run: make
+        run: |
+          exit_status=$(make || true)
+          if [ exit_status == 1 ]; then
+            echo "::error ::Build ERROR"
+            exit 1
 
       - name: Check for banned functions
         run: |
@@ -40,5 +44,5 @@ jobs:
             done <<< "$banned_functions"
             exit 1
           else
-            echo "::success ::No banned functions found."
+            echo "::notice ::No banned functions found."
           fi
