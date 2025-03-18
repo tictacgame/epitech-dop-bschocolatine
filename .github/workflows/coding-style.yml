@@ -32,5 +32,5 @@ jobs:
               done < "$(pwd)/coding-style-reports.log"
               exit 1
           else
-              echo "::success No coding style errors detected"
+              echo "::notice No coding style errors detected"
           fi
