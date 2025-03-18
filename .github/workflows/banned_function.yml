@@ -9,7 +9,7 @@ on:
 jobs:
   banned-function:
     runs-on: ubuntu-latest
-    needs: [retrieve-bin]
+
     steps:
       - name: Create binary
         run: make
