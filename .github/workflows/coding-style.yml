@@ -23,7 +23,7 @@ jobs:
               str=(`echo $ERR | sed 's/:/\n/g'`)
               echo "::error file=${str[1]#./},title=${str[3]#./} coding style errors detected: ${str[2]#./}::${str[4]#./}"
             done
-            if [[ -n $CS ]] then
+            if [[ -n $CS ]]; then
               exit 1
             else
               echo No coding style errors detected
