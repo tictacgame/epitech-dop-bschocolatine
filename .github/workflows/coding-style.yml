@@ -18,12 +18,13 @@ jobs:
         - name: Run checker
           run: |
             check.sh $(pwd) $(pwd)
-            CSERR=$(cat $(pwd)/coding-style-reports.log)
-            while IFS= read -r ERR; do
-              str=$(echo $ERR | sed 's/:/\n/g')
-              echo "::error file=${str[1]#./},title=${str[3]#./} coding style errors detected: ${str[2]#./}::${str[4]#./}"
-            done <<< "$CSERR"
-            if [[ -n $CS ]]; then
+            CODING_STYLE_ERRORS=$(cat $(pwd)/coding-style-reports.log)
+            for ERRORS in $CODING_STYLE_ERRORS; do
+              array=(`echo $ERRORS | sed 's/:/\n/g'`)
+              echo "::error file=${array[1]#./},title=${array[3]#./} coding style errors detected: ${array[2]#./}::${array[4]#./}"
+            done
+            if [[ -n $CODING_STYLE_ERRORS ]]
+            then
               exit 1
             else
               echo No coding style errors detected
