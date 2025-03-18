@@ -30,12 +30,13 @@ jobs:
           if [ -n "$banned_functions" ]; then
             echo "Banned functions found:"
             while IFS= read -r function; do
+              function=$(echo "$function" | awk '{print $3}')
               if [ -n "$allowed_functions" ]; then
                 if ! echo "$allowed_functions" | grep -qw "$function"; then
-                  echo "::error file=./binary/a.out::Banned function detected: $function"
+                  echo "::error file=./binary::Banned function detected: $function"
                 fi
               else
-                echo "::error file=./binary/a.out::Banned function detected: $function"
+                echo "::error file=./binary::Banned function detected: $function"
               fi
             done <<< "$banned_functions"
             exit 1
