@@ -40,5 +40,5 @@ jobs:
             done <<< "$banned_functions"
             exit 1
           else
-            echo "::notice ::No banned functions found."
+            echo "::success ::No banned functions found."
           fi
