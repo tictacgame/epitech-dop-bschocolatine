@@ -27,7 +27,7 @@ jobs:
 
                   if [ "${array[2]}" != "INFO" ]; then
                     should_exit=1
-                    echo "::error title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
+                    echo "::error file=${array[0]#./},line=${array[1]},title=${array[2]}::${array[3]}"
                   else
                     echo "::warning title=${array[2]},file=${array[0]#./},line=${array[1]}::${array[3]}"
                   fi
