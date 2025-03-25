@@ -91,45 +91,7 @@ jobs:
         timeout-minutes: 2
         run: make tests_run
 
-  push_to_mirror:
-    name: Push to a mirror repository
-    if: ${{ github.event_name == 'push' }}
-    needs: run_tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Create SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ env.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa $(echo ${{ env.MIRROR_URL }} | cut -d':' -f1 | cut -d'@' -f2) >> ~/.ssh/known_hosts
-        env:
-          SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
-
-      - name: Remove .github directory
-        run: |
-          git filter-branch --force --index-filter 'git rm -r --cached --ignore-unmatch .github' --prune-empty --tag-name-filter cat -- --all
-          git gc --prune=now
-          git clean -fd
-
-      - name: Verify Repository
-        run: |
-          git fsck --full || echo "Git fsck completed with warnings"
-          git gc || echo "Git gc completed with warnings"
-
-      - name: Push to mirror
-        run: |
-          git remote add -f mirror ${{ env.MIRROR_URL }}
-          git push mirror --mirror --prune --force
-          echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
-
-  banned-function:
+  check_banned_function:
     needs: run_tests
     runs-on: ubuntu-latest
 
@@ -178,3 +140,42 @@ jobs:
           else
             echo "::notice ::No banned functions found."
           fi
+
+
+  push_to_mirror:
+    name: Push to a mirror repository
+    if: ${{ github.event_name == 'push' }}
+    needs: check_banned_function
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ env.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa $(echo ${{ env.MIRROR_URL }} | cut -d':' -f1 | cut -d'@' -f2) >> ~/.ssh/known_hosts
+        env:
+          SSH_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
+
+      - name: Remove .github directory
+        run: |
+          git filter-branch --force --index-filter 'git rm -r --cached --ignore-unmatch .github' --prune-empty --tag-name-filter cat -- --all
+          git gc --prune=now
+          git clean -fd
+
+      - name: Verify Repository
+        run: |
+          git fsck --full || echo "Git fsck completed with warnings"
+          git gc || echo "Git gc completed with warnings"
+
+      - name: Push to mirror
+        run: |
+          git remote add -f mirror ${{ env.MIRROR_URL }}
+          git push mirror --mirror --prune --force
+          echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
