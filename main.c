@@ -9,7 +9,6 @@
 
 int main(void)
 {
-    // cou 
     puts("Hello world \n");
     return 0;
 }
