@@ -91,6 +91,9 @@ jobs:
     container: epitechcontent/epitest-docker
 
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
       - name: Run make test
         timeout-minutes: 2
         run: make tests_run
