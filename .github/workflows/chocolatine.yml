@@ -62,32 +62,33 @@ jobs:
       - name: Try to clean
         run: make clean
 
-      - name: Check if the binary stay here
+      - name: Check if the binary stays here
         run: |
           SHOULD_EXIT=0
 
           for FILE in $EXECUTABLES; do
-              if [[ -s $FILE ]]; then
-                  if [[ $(test -f $FILE) ]]; then
-                      echo "::notice $FILE has been found and is executable"
-                  else
-                      echo "::error $FILE has been found but is not executable"
-                      SHOULD_EXIT=1
-                  fi
+            if [[ -s "$FILE" ]]; then
+              if [[ -f "$FILE" && -x "$FILE" ]]; then
+                echo "::notice $FILE has been found and is executable"
               else
-                  echo "::error title=Executable not found,file=${FILE}::Please ensure your file has been compile"
-                  SHOULD_EXIT=1
+                echo "::error $FILE has been found but is not executable"
+                SHOULD_EXIT=1
               fi
+            else
+              echo "::error title=Executable not found,file=${FILE}::Please ensure your file has been compiled"
+              echo $(ls)
+              SHOULD_EXIT=1
+            fi
           done
-          if [[ $SHOULD_EXIT == 1 ]]; then
-              exit 1
+          if [[ $SHOULD_EXIT -eq 1 ]]; then
+            exit 1
           fi
 
   run_tests:
     name: Run criterion test
     needs: check_program_compilation
     runs-on: ubuntu-latest
-    container: epitechcontent/epitest-content
+    container: epitechcontent/epitest-docker
 
     steps:
       - name: Run make test
