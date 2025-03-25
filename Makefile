@@ -14,6 +14,9 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) -o $(NAME) $(OBJ)
 
+tests_run:
+	echo "Hello CI action, how are you ?"
+
 clean:
 	$(RM) $(OBJ)
 
