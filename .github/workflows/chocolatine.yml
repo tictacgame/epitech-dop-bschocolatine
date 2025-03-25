@@ -48,7 +48,7 @@ jobs:
 
   check_program_compilation:
       name: Compilation checker
-      id: check_program_compilation
+      id: "check_program_compilation"
       needs: check_coding_style
       runs-on: ubuntu-latest
       container: epitechcontent/epitest-docker
