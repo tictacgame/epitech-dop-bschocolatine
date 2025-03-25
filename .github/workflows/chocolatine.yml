@@ -13,7 +13,6 @@ env:
 jobs:
   check_coding_style:
     name: Coding Style Checking
-    id: check_coding_style
     runs-on: ubuntu-latest
     container: ghcr.io/epitech/coding-style-checker:latest
 
@@ -48,7 +47,6 @@ jobs:
 
   check_program_compilation:
     name: Compilation checker
-    id: check_program_compilation
     needs: check_coding_style
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker
@@ -84,7 +82,6 @@ jobs:
 
   run_tests:
     name: Run criterion test
-    id: run_tests
     needs: check_program_compilation
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-content
@@ -133,7 +130,6 @@ jobs:
           echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
 
   banned-function:
-    id: banned_function
     needs: run_tests
     runs-on: ubuntu-latest
 
