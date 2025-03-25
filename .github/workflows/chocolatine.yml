@@ -133,52 +133,52 @@ jobs:
             echo "Successfully mirrored to ${{ env.MIRROR_URL }} "
 
   banned-function:
-    id: banned_function
-    needs: run_tests
-    runs-on: ubuntu-latest
+    - id: banned_function
+      needs: run_tests
+      runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4xz
+      steps:
+        - name: Checkout the code
+          uses: actions/checkout@v4xz
 
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install -y cmake make gcc clang
+        - name: Install dependencies
+          run: sudo apt update && sudo apt install -y cmake make gcc clang
 
-      - name: Create binary
-        run: make
+        - name: Create binary
+          run: make
 
-      - name: Check for banned functions
-        shell: bash
-        run: |
-          if [ -f allowed_function.note ]; then
-            allowed_functions=$(cat allowed_function.note)
-          else
-            allowed_functions=""
-            echo "::warning ::Warning: allowed_function.note not found."
-          fi
-          echo $(ls)
-          should_exit=0
-          banned_functions=$(nm -u ${{ env.BINARY_NAME }} | grep GLIBC | grep -v "__" || true)
-          if [ -n "$banned_functions" ]; then
-              IFS=$'\n'
-              for function in ${banned_functions}
-                do
-                  function_name=$(echo "$function" | sed -E 's/^[[:space:]]*[^[:space:]]+[[:space:]]+([a-zA-Z0-9_]+)(@.*)?$/\1/')
-                  if [ -n "$allowed_functions" ]; then
-                      if [[ ! $(echo "$allowed_functions" | grep -F "$function_name") ]]; then
-                          should_exit=1
-                          echo "::error file=./binary::Banned function detected: $function_name"
-                      fi
-                  else
-                      echo "::error file=./binary::Banned function detected: $function_name"
-                      should_exit=1
-                  fi
-              done
-              if [ "$should_exit" == 1 ]; then
-                exit 1
-              else
-                echo "::notice ::No banned functions found."
-              fi
-          else
-            echo "::notice ::No banned functions found."
-          fi
+        - name: Check for banned functions
+          shell: bash
+          run: |
+            if [ -f allowed_function.note ]; then
+              allowed_functions=$(cat allowed_function.note)
+            else
+              allowed_functions=""
+              echo "::warning ::Warning: allowed_function.note not found."
+            fi
+            echo $(ls)
+            should_exit=0
+            banned_functions=$(nm -u ${{ env.BINARY_NAME }} | grep GLIBC | grep -v "__" || true)
+            if [ -n "$banned_functions" ]; then
+                IFS=$'\n'
+                for function in ${banned_functions}
+                  do
+                    function_name=$(echo "$function" | sed -E 's/^[[:space:]]*[^[:space:]]+[[:space:]]+([a-zA-Z0-9_]+)(@.*)?$/\1/')
+                    if [ -n "$allowed_functions" ]; then
+                        if [[ ! $(echo "$allowed_functions" | grep -F "$function_name") ]]; then
+                            should_exit=1
+                            echo "::error file=./binary::Banned function detected: $function_name"
+                        fi
+                    else
+                        echo "::error file=./binary::Banned function detected: $function_name"
+                        should_exit=1
+                    fi
+                done
+                if [ "$should_exit" == 1 ]; then
+                  exit 1
+                else
+                  echo "::notice ::No banned functions found."
+                fi
+            else
+              echo "::notice ::No banned functions found."
+            fi
