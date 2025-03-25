@@ -124,7 +124,7 @@ jobs:
           fi
           echo $(ls)
           should_exit=0
-          banned_functions=$(nm -u ${{ env.BINARY_NAME }} | grep GLIBC | grep -v "__" || true)
+          banned_functions=$(nm -u ${{ env.EXECUTABLES }} | grep GLIBC | grep -v "__" || true)
           if [ -n "$banned_functions" ]; then
               IFS=$'\n'
               for function in ${banned_functions}
