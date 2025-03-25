@@ -62,7 +62,7 @@ jobs:
           run: make clean
 
         - name: Check if the binary stay here
-        - run: |
+          run: |
             SHOULD_EXIT=0
 
             for FILE in $EXECUTABLES; do
