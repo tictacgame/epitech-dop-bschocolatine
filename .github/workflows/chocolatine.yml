@@ -64,20 +64,20 @@ jobs:
 
       - name: Check if the binary stays here
         run: |
-          SHOULD_EXIT=0
+          should_exit=0
 
           for FILE in $EXECUTABLES; do
-            if [[ -s "$FILE" ]]; then
+            if [ -s "$FILE" ]; then
               if [[ -f "$FILE" && -x "$FILE" ]]; then
                 echo "::notice $FILE has been found and is executable"
               else
                 echo "::error $FILE has been found but is not executable"
-                SHOULD_EXIT=1
+                should_exit=1
               fi
             else
               echo "::error title=Executable not found,file=${FILE}::Please ensure your file has been compiled"
               echo $(ls)
-              SHOULD_EXIT=1
+              should_exit=1
             fi
           done
           if [ "$should_exit" == 1 ]; then
